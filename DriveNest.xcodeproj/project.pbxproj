@@ -6,14 +6,75 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8F5575392EED9CB300F806C9 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 8F5575382EED9CB300F806C9 /* FirebaseAnalytics */; };
+		8F55753B2EED9CB300F806C9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 8F55753A2EED9CB300F806C9 /* FirebaseMessaging */; };
+		8F55753E2EED9CDC00F806C9 /* AppsFlyerLib in Frameworks */ = {isa = PBXBuildFile; productRef = 8F55753D2EED9CDC00F806C9 /* AppsFlyerLib */; };
+		8F55754C2EED9D7C00F806C9 /* NotificationAppServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 8F5575452EED9D7C00F806C9 /* NotificationAppServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8F5575542EED9D8F00F806C9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 8F5575532EED9D8F00F806C9 /* FirebaseMessaging */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8F55754A2EED9D7C00F806C9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8F5572C72EE0950400F806C9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8F5575442EED9D7C00F806C9;
+			remoteInfo = NotificationAppServiceExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8F5575512EED9D7C00F806C9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				8F55754C2EED9D7C00F806C9 /* NotificationAppServiceExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		8F5572CF2EE0950400F806C9 /* DriveNest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DriveNest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F5575452EED9D7C00F806C9 /* NotificationAppServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationAppServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8F5575402EED9D0000F806C9 /* Exceptions for "DriveNest" folder in "DriveNest" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8F5572CE2EE0950400F806C9 /* DriveNest */;
+		};
+		8F5575502EED9D7C00F806C9 /* Exceptions for "NotificationAppServiceExtension" folder in "NotificationAppServiceExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8F5575442EED9D7C00F806C9 /* NotificationAppServiceExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8F5572D12EE0950400F806C9 /* DriveNest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8F5575402EED9D0000F806C9 /* Exceptions for "DriveNest" folder in "DriveNest" target */,
+			);
 			path = DriveNest;
+			sourceTree = "<group>";
+		};
+		8F5575462EED9D7C00F806C9 /* NotificationAppServiceExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8F5575502EED9D7C00F806C9 /* Exceptions for "NotificationAppServiceExtension" folder in "NotificationAppServiceExtension" target */,
+			);
+			path = NotificationAppServiceExtension;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +84,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F55753B2EED9CB300F806C9 /* FirebaseMessaging in Frameworks */,
+				8F5575392EED9CB300F806C9 /* FirebaseAnalytics in Frameworks */,
+				8F55753E2EED9CDC00F806C9 /* AppsFlyerLib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F5575422EED9D7C00F806C9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F5575542EED9D8F00F806C9 /* FirebaseMessaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -33,6 +105,8 @@
 			isa = PBXGroup;
 			children = (
 				8F5572D12EE0950400F806C9 /* DriveNest */,
+				8F5575462EED9D7C00F806C9 /* NotificationAppServiceExtension */,
+				8F5575522EED9D8F00F806C9 /* Frameworks */,
 				8F5572D02EE0950400F806C9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,8 +115,16 @@
 			isa = PBXGroup;
 			children = (
 				8F5572CF2EE0950400F806C9 /* DriveNest.app */,
+				8F5575452EED9D7C00F806C9 /* NotificationAppServiceExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8F5575522EED9D8F00F806C9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -55,20 +137,48 @@
 				8F5572CB2EE0950400F806C9 /* Sources */,
 				8F5572CC2EE0950400F806C9 /* Frameworks */,
 				8F5572CD2EE0950400F806C9 /* Resources */,
+				8F5575512EED9D7C00F806C9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				8F55754B2EED9D7C00F806C9 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				8F5572D12EE0950400F806C9 /* DriveNest */,
 			);
 			name = DriveNest;
 			packageProductDependencies = (
+				8F5575382EED9CB300F806C9 /* FirebaseAnalytics */,
+				8F55753A2EED9CB300F806C9 /* FirebaseMessaging */,
+				8F55753D2EED9CDC00F806C9 /* AppsFlyerLib */,
 			);
 			productName = DriveNest;
 			productReference = 8F5572CF2EE0950400F806C9 /* DriveNest.app */;
 			productType = "com.apple.product-type.application";
+		};
+		8F5575442EED9D7C00F806C9 /* NotificationAppServiceExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8F55754D2EED9D7C00F806C9 /* Build configuration list for PBXNativeTarget "NotificationAppServiceExtension" */;
+			buildPhases = (
+				8F5575412EED9D7C00F806C9 /* Sources */,
+				8F5575422EED9D7C00F806C9 /* Frameworks */,
+				8F5575432EED9D7C00F806C9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				8F5575462EED9D7C00F806C9 /* NotificationAppServiceExtension */,
+			);
+			name = NotificationAppServiceExtension;
+			packageProductDependencies = (
+				8F5575532EED9D8F00F806C9 /* FirebaseMessaging */,
+			);
+			productName = NotificationAppServiceExtension;
+			productReference = 8F5575452EED9D7C00F806C9 /* NotificationAppServiceExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -83,6 +193,9 @@
 					8F5572CE2EE0950400F806C9 = {
 						CreatedOnToolsVersion = 16.4;
 					};
+					8F5575442EED9D7C00F806C9 = {
+						CreatedOnToolsVersion = 16.4;
+					};
 				};
 			};
 			buildConfigurationList = 8F5572CA2EE0950400F806C9 /* Build configuration list for PBXProject "DriveNest" */;
@@ -94,18 +207,30 @@
 			);
 			mainGroup = 8F5572C62EE0950400F806C9;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8F5575372EED9CB300F806C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				8F55753C2EED9CDC00F806C9 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8F5572D02EE0950400F806C9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				8F5572CE2EE0950400F806C9 /* DriveNest */,
+				8F5575442EED9D7C00F806C9 /* NotificationAppServiceExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8F5572CD2EE0950400F806C9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F5575432EED9D7C00F806C9 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +247,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8F5575412EED9D7C00F806C9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8F55754B2EED9D7C00F806C9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8F5575442EED9D7C00F806C9 /* NotificationAppServiceExtension */;
+			targetProxy = 8F55754A2EED9D7C00F806C9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		8F5572D92EE0950600F806C9 /* Debug */ = {
@@ -249,7 +389,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DriveNest/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Drive Nest: Car Tracker";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow to use your camera in this app.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Drive Nest: Car Tracker may use limited device information to understand how the app is used and to keep its features running smoothly. This data helps us detect issues, improve stability, and enhance overall functionality. We do not use this information to follow you across other apps or websites, and it is not sold or shared for external advertising purposes.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -264,7 +407,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.3;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.brrriifilllapp.DriveNest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -288,7 +431,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DriveNest/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Drive Nest: Car Tracker";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Allow to use your camera in this app.";
+				INFOPLIST_KEY_NSUserTrackingUsageDescription = "Drive Nest: Car Tracker may use limited device information to understand how the app is used and to keep its features running smoothly. This data helps us detect issues, improve stability, and enhance overall functionality. We do not use this information to follow you across other apps or websites, and it is not sold or shared for external advertising purposes.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -303,7 +449,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 15.3;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.brrriifilllapp.DriveNest;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -314,6 +460,67 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.5;
+			};
+			name = Release;
+		};
+		8F55754E2EED9D7C00F806C9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationAppServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationAppServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brrriifilllapp.DriveNest.NotificationAppServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		8F55754F2EED9D7C00F806C9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = NotificationAppServiceExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = NotificationAppServiceExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brrriifilllapp.DriveNest.NotificationAppServiceExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -338,7 +545,58 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		8F55754D2EED9D7C00F806C9 /* Build configuration list for PBXNativeTarget "NotificationAppServiceExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8F55754E2EED9D7C00F806C9 /* Debug */,
+				8F55754F2EED9D7C00F806C9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8F5575372EED9CB300F806C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.7.0;
+			};
+		};
+		8F55753C2EED9CDC00F806C9 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AppsFlyerSDK/AppsFlyerFramework";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.17.8;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8F5575382EED9CB300F806C9 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F5575372EED9CB300F806C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		8F55753A2EED9CB300F806C9 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F5575372EED9CB300F806C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		8F55753D2EED9CDC00F806C9 /* AppsFlyerLib */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F55753C2EED9CDC00F806C9 /* XCRemoteSwiftPackageReference "AppsFlyerFramework" */;
+			productName = AppsFlyerLib;
+		};
+		8F5575532EED9D8F00F806C9 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8F5575372EED9CB300F806C9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8F5572C72EE0950400F806C9 /* Project object */;
 }

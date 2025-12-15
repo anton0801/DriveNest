@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CarDashboardView: View {
     let car: Car
-    // @State private var mileage = sampleCars[0].mileage // Sample
     
     var body: some View {
         ZStack {

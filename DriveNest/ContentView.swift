@@ -1,4 +1,7 @@
 import SwiftUI
+import WebKit
+import StoreKit
+import Combine
 
 struct ContentView: View {
     @State private var cars: [Car] = [
@@ -6,6 +9,7 @@ struct ContentView: View {
         Car(name: "Daily", model: "BMW M3 Competition", mileage: 58700, documentStatus: .soon)
     ]
     
+    @State private var showingGlobalSettings = false
     @State private var showAddCar = false
     @StateObject private var carStore = AppData()
     
@@ -69,12 +73,52 @@ struct ContentView: View {
                         .foregroundColor(.goldNeon)
                         .shadow(color: .goldNeon.opacity(0.5), radius: 10)
                 }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showingGlobalSettings = true
+                    } label: {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.goldNeon)
+                    }
+                }
+            }
+            .sheet(isPresented: $showingGlobalSettings) {
+                GlobalSettingsView()
             }
             .sheet(isPresented: $showAddCar) {
                 AddCarView { newCar in
                     carStore.addCar(newCar)
                 }
             }
+        }
+    }
+}
+
+struct GlobalSettingsView: View {
+    
+    @Environment(\.requestReview) var requestReview
+    
+    var body: some View {
+        NavigationStack {
+            List {
+                Button("Privacy Policy") {
+                    if let url = URL(string: "https://driivenest.com/privacy-policy.html") {
+                        UIApplication.shared.open(url)
+                    }
+                }
+                
+                Button("Rate Drive Nest") {
+                    requestReview()
+                }
+                
+                Button("Contact Us") {
+                    if let url = URL(string: "https://driivenest.com/support.html") {
+                        UIApplication.shared.open(url)
+                    }
+                }
+            }
+            .navigationTitle("Settings")
         }
     }
 }
@@ -348,10 +392,10 @@ struct CarDetailView: View {
                             .environmentObject(carStore)) {
                             DashboardTile(title: "Expenses", icon: "dollarsign.circle.fill", gradient: [.purpleNeon, .purpleDeep])
                         }
-                        NavigationLink(destination: DocumentsView()) {
+                        NavigationLink(destination: DocumentsView(car: car).environmentObject(carStore)) {
                             DashboardTile(title: "Documents", icon: "doc.text.fill", gradient: [.goldNeon, .goldDark])
                         }
-                        NavigationLink(destination: RemindersView()) {
+                        NavigationLink(destination: RemindersView(car: car).environmentObject(carStore)) {
                             DashboardTile(title: "Reminders", icon: "bell.fill", gradient: [.pink, .red])
                         }
                         NavigationLink(destination: CarSettingsView(car: car)) {
@@ -701,4 +745,318 @@ extension Color {
     static let purpleNeon   = Color(hex: "#9D7AFF")   // #9D7AFF
     static let purpleDeep   = Color(hex: "#6B4CFF")   // #6B4CFF
     static let turquoise    = Color(hex: "#3ED4C9")    // #3ED4C9
+}
+
+struct DriveNestMainView: View {
+    
+    @State private var activeNestLink = ""
+    
+    var body: some View {
+        ZStack {
+            if let nestLink = URL(string: activeNestLink) {
+                NestHostView(nestLink: nestLink)
+                    .ignoresSafeArea(.keyboard, edges: .bottom)
+            }
+        }
+        .preferredColorScheme(.dark)
+        .onAppear(perform: configureStartLink)
+        .onReceive(NotificationCenter.default.publisher(for: Notification.Name("LoadTempUrl"))) { _ in
+            if let tempLink = UserDefaults.standard.string(forKey: "temp_url"), !tempLink.isEmpty {
+                activeNestLink = tempLink
+                UserDefaults.standard.removeObject(forKey: "temp_url")
+            }
+        }
+    }
+    
+    private func configureStartLink() {
+        let temp = UserDefaults.standard.string(forKey: "temp_url")
+        let stored = UserDefaults.standard.string(forKey: "stored_config") ?? ""
+        activeNestLink = temp ?? stored
+        
+        if temp != nil {
+            UserDefaults.standard.removeObject(forKey: "temp_url")
+        }
+    }
+}
+
+struct NestHostView: UIViewRepresentable {
+    let nestLink: URL
+    
+    @StateObject private var nestSupervisor = NestSupervisor()
+    
+    func makeCoordinator() -> NestNavigationManager {
+        NestNavigationManager(supervisor: nestSupervisor)
+    }
+    
+    func makeUIView(context: Context) -> WKWebView {
+        nestSupervisor.initPrimaryView()
+        nestSupervisor.primaryNestView.uiDelegate = context.coordinator
+        nestSupervisor.primaryNestView.navigationDelegate = context.coordinator
+        
+        nestSupervisor.fetchCachedData()
+        nestSupervisor.primaryNestView.load(URLRequest(url: nestLink))
+        
+        return nestSupervisor.primaryNestView
+    }
+    
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
+}
+
+class NestSupervisor: ObservableObject {
+    @Published var primaryNestView: WKWebView!
+    
+    private var subscriptionsSet = Set<AnyCancellable>()
+    
+    func initPrimaryView() {
+        let configSetup = buildDefaultConfig()
+        primaryNestView = WKWebView(frame: .zero, configuration: configSetup)
+        setViewParams(on: primaryNestView)
+    }
+    
+    private func buildDefaultConfig() -> WKWebViewConfiguration {
+        let config = WKWebViewConfiguration()
+        config.allowsInlineMediaPlayback = true
+        config.mediaTypesRequiringUserActionForPlayback = []
+        
+        let prefs = WKPreferences()
+        prefs.javaScriptEnabled = true
+        prefs.javaScriptCanOpenWindowsAutomatically = true
+        config.preferences = prefs
+        
+        let pagePrefs = WKWebpagePreferences()
+        pagePrefs.allowsContentJavaScript = true
+        config.defaultWebpagePreferences = pagePrefs
+        
+        return config
+    }
+    
+    private func setViewParams(on webView: WKWebView) {
+        webView.scrollView.minimumZoomScale = 1.0
+        webView.scrollView.maximumZoomScale = 1.0
+        webView.scrollView.bounces = false
+        webView.scrollView.bouncesZoom = false
+        webView.allowsBackForwardNavigationGestures = true
+    }
+    
+    @Published var extraNestViews: [WKWebView] = []
+    
+    func fetchCachedData() {
+        guard let cachedData = UserDefaults.standard.object(forKey: "preserved_grains") as? [String: [String: [HTTPCookiePropertyKey: AnyObject]]] else { return }
+        
+        let dataStore = primaryNestView.configuration.websiteDataStore.httpCookieStore
+        let dataItems = cachedData.values.flatMap { $0.values }.compactMap {
+            HTTPCookie(properties: $0 as [HTTPCookiePropertyKey: Any])
+        }
+        
+        dataItems.forEach { dataStore.setCookie($0) }
+    }
+    
+    func stepBackNest(to url: URL? = nil) {
+        if !extraNestViews.isEmpty {
+            if let lastExtra = extraNestViews.last {
+                lastExtra.removeFromSuperview()
+                extraNestViews.removeLast()
+            }
+            
+            if let targetURL = url {
+                primaryNestView.load(URLRequest(url: targetURL))
+            }
+        } else if primaryNestView.canGoBack {
+            primaryNestView.goBack()
+        }
+    }
+    
+    func executeReload() {
+        primaryNestView.reload()
+    }
+}
+
+class NestNavigationManager: NSObject, WKNavigationDelegate, WKUIDelegate {
+    
+    private var redirectCounter = 0
+    
+    init(supervisor: NestSupervisor) {
+        self.nestSupervisor = supervisor
+        super.init()
+    }
+    
+    private var nestSupervisor: NestSupervisor
+    
+    func webView(_ webView: WKWebView,
+                 createWebViewWith configuration: WKWebViewConfiguration,
+                 for action: WKNavigationAction,
+                 windowFeatures: WKWindowFeatures) -> WKWebView? {
+        guard action.targetFrame == nil else { return nil }
+        
+        let newView = WKWebView(frame: .zero, configuration: configuration)
+        configNewView(newView)
+        setConstraintsFor(newView)
+        
+        nestSupervisor.extraNestViews.append(newView)
+        
+        let swipeRecognizer = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(processSwipe))
+        swipeRecognizer.edges = .left
+        newView.addGestureRecognizer(swipeRecognizer)
+        
+        func isRequestValid(_ request: URLRequest) -> Bool {
+            guard let urlStr = request.url?.absoluteString,
+                  !urlStr.isEmpty,
+                  urlStr != "about:blank" else { return false }
+            return true
+        }
+        
+        if isRequestValid(action.request) {
+            newView.load(action.request)
+        }
+        
+        return newView
+    }
+    
+    private var lastURL: URL?
+    
+    private let redirectMax = 70
+    
+    func webView(_ webView: WKWebView,
+                 didReceive challenge: URLAuthenticationChallenge,
+                 completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let serverTrust = challenge.protectionSpace.serverTrust {
+            completionHandler(.useCredential, URLCredential(trust: serverTrust))
+        } else {
+            completionHandler(.performDefaultHandling, nil)
+        }
+    }
+    
+    private func configNewView(_ webView: WKWebView) {
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.scrollView.isScrollEnabled = true
+        webView.scrollView.minimumZoomScale = 1.0
+        webView.scrollView.maximumZoomScale = 1.0
+        webView.scrollView.bounces = false
+        webView.scrollView.bouncesZoom = false
+        webView.allowsBackForwardNavigationGestures = true
+        webView.navigationDelegate = self
+        webView.uiDelegate = self
+        nestSupervisor.primaryNestView.addSubview(webView)
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        let scriptEnhance = """
+        (function() {
+            const vp = document.createElement('meta');
+            vp.name = 'viewport';
+            vp.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+            document.head.appendChild(vp);
+            
+            const rules = document.createElement('style');
+            rules.textContent = 'body { touch-action: pan-x pan-y; } input, textarea { font-size: 16px !important; }';
+            document.head.appendChild(rules);
+            
+            document.addEventListener('gesturestart', e => e.preventDefault());
+            document.addEventListener('gesturechange', e => e.preventDefault());
+        })();
+        """
+        
+        webView.evaluateJavaScript(scriptEnhance) { _, error in
+            if let error = error { print("Enhance script failed: \(error)") }
+        }
+    }
+    
+    @objc private func processSwipe(_ recognizer: UIScreenEdgePanGestureRecognizer) {
+        guard recognizer.state == .ended,
+              let swipedView = recognizer.view as? WKWebView else { return }
+        
+        if swipedView.canGoBack {
+            swipedView.goBack()
+        } else if nestSupervisor.extraNestViews.last === swipedView {
+            nestSupervisor.stepBackNest(to: nil)
+        }
+    }
+    
+    private func storeData(from webView: WKWebView) {
+        webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
+            var dataDict: [String: [String: [HTTPCookiePropertyKey: Any]]] = [:]
+            
+            for cookie in cookies {
+                var domainDict = dataDict[cookie.domain] ?? [:]
+                if let properties = cookie.properties {
+                    domainDict[cookie.name] = properties
+                }
+                dataDict[cookie.domain] = domainDict
+            }
+            
+            UserDefaults.standard.set(dataDict, forKey: "preserved_grains")
+        }
+    }
+    
+    func webView(_ webView: WKWebView,
+                 runJavaScriptAlertPanelWithMessage message: String,
+                 initiatedByFrame frame: WKFrameInfo,
+                 completionHandler: @escaping () -> Void) {
+        completionHandler()
+    }
+    
+    func webView(_ webView: WKWebView,
+                 didFailProvisionalNavigation navigation: WKNavigation!,
+                 withError error: Error) {
+        if (error as NSError).code == NSURLErrorHTTPTooManyRedirects,
+           let safeURL = lastURL {
+            webView.load(URLRequest(url: safeURL))
+        }
+    }
+    
+    func webView(_ webView: WKWebView, didReceiveServerRedirectForProvisionalNavigation navigation: WKNavigation!) {
+        redirectCounter += 1
+        
+        if redirectCounter > redirectMax {
+            webView.stopLoading()
+            if let safeURL = lastURL {
+                webView.load(URLRequest(url: safeURL))
+            }
+            return
+        }
+        
+        lastURL = webView.url
+        storeData(from: webView)
+    }
+    
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        guard let url = navigationAction.request.url else {
+            decisionHandler(.allow)
+            return
+        }
+        
+        lastURL = url
+        
+        let schemeLower = (url.scheme ?? "").lowercased()
+        let urlStringLower = url.absoluteString.lowercased()
+        
+        let internalSchemes: Set<String> = ["http", "https", "about", "blob", "data", "javascript", "file"]
+        let internalPrefixes = ["srcdoc", "about:blank", "about:srcdoc"]
+        
+        let isInternal = internalSchemes.contains(schemeLower) ||
+        internalPrefixes.contains { urlStringLower.hasPrefix($0) } ||
+        urlStringLower == "about:blank"
+        
+        if isInternal {
+            decisionHandler(.allow)
+            return
+        }
+        
+        UIApplication.shared.open(url, options: [:]) { _ in }
+        
+        decisionHandler(.cancel)
+    }
+    
+    private func setConstraintsFor(_ webView: WKWebView) {
+        NSLayoutConstraint.activate([
+            webView.leadingAnchor.constraint(equalTo: nestSupervisor.primaryNestView.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: nestSupervisor.primaryNestView.trailingAnchor),
+            webView.topAnchor.constraint(equalTo: nestSupervisor.primaryNestView.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: nestSupervisor.primaryNestView.bottomAnchor)
+        ])
+    }
 }

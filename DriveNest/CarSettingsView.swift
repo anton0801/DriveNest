@@ -27,17 +27,6 @@ struct CarSettingsView: View {
                     }
                 }
                 
-                Section("Preferences") {
-                    Picker("Units", selection: .constant("km")) {
-                        Text("Kilometers").tag("km")
-                        Text("Miles").tag("mi")
-                    }
-                    Picker("Currency", selection: .constant("$")) {
-                        Text("USD").tag("$")
-                        Text("EUR").tag("€")
-                    }
-                }
-                
             }
             .scrollContentBackground(.hidden)
         }
