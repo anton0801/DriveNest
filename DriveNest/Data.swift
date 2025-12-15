@@ -398,7 +398,7 @@ struct DetermineCurrentPhaseUseCase {
     
     func execute(attributionInfo: [String: Any], firstTimeOpening: Bool, planURL: URL?, tempURL: String?) -> DrivePhase {
         if attributionInfo.isEmpty {
-            return .parked // Will handle in VM
+            return .parked
         }
         
         if repository.getAppMode() == "Legacy" {
@@ -406,7 +406,7 @@ struct DetermineCurrentPhaseUseCase {
         }
         
         if firstTimeOpening && (attributionInfo["af_status"] as? String == "Organic") {
-            return .ignition // Trigger sequence
+            return .organic
         }
         
         if let temp = tempURL, let url = URL(string: temp), planURL == nil {
@@ -503,7 +503,7 @@ struct FetchConfigUseCase {
     }
 }
 
-enum DrivePhase { case ignition, driving, parked, noSignal }
+enum DrivePhase { case ignition, driving, parked, noSignal, organic }
 
 final class DriveNestViewModel: ObservableObject {
     @Published var currentDrivePhase: DrivePhase = .ignition
@@ -559,7 +559,7 @@ final class DriveNestViewModel: ObservableObject {
         let useCase = DetermineCurrentPhaseUseCase(repository: repository)
         let phase = useCase.execute(attributionInfo: attributionInfo, firstTimeOpening: repository.isFirstLaunch, planURL: nestURL, tempURL: UserDefaults.standard.string(forKey: "temp_url"))
         
-        if phase == .ignition && repository.isFirstLaunch {
+        if phase == .organic && repository.isFirstLaunch {
             initiateFirstDrive()
             return
         }

@@ -27,7 +27,6 @@ struct DriveCarSplashView: View {
             }
         }
         .preferredColorScheme(.dark)
-        .ignoresSafeArea(.all)
     }
 }
 
@@ -37,6 +36,8 @@ private struct ActiveDriveContent: View {
         Group {
             switch viewModel.currentDrivePhase {
             case .ignition:
+                EmptyView()
+            case .organic:
                 EmptyView()
             case .driving:
                 if let _ = viewModel.nestURL {

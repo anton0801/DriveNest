@@ -387,6 +387,7 @@
 				CODE_SIGN_ENTITLEMENTS = DriveNest/DriveNest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DriveNest/Info.plist;
@@ -429,6 +430,7 @@
 				CODE_SIGN_ENTITLEMENTS = DriveNest/DriveNest.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DriveNest/Info.plist;
@@ -468,6 +470,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationAppServiceExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationAppServiceExtension;
@@ -498,6 +501,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationAppServiceExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationAppServiceExtension;

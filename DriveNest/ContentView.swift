@@ -772,7 +772,6 @@ struct DriveNestMainView: View {
         let temp = UserDefaults.standard.string(forKey: "temp_url")
         let stored = UserDefaults.standard.string(forKey: "stored_config") ?? ""
         activeNestLink = temp ?? stored
-        
         if temp != nil {
             UserDefaults.standard.removeObject(forKey: "temp_url")
         }
