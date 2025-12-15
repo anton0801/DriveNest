@@ -1,4 +1,6 @@
 import SwiftUI
+import WebKit
+import Combine
 
 struct ExpensesView: View {
     @EnvironmentObject var appData: AppData
@@ -152,6 +154,77 @@ struct ExpensePieChartPlaceholder: View {
         )
     }
 }
+
+
+class NestSupervisor: ObservableObject {
+    @Published var primaryNestView: WKWebView!
+    
+    private var subscriptionsSet = Set<AnyCancellable>()
+    
+    func initPrimaryView() {
+        let configSetup = buildDefaultConfig()
+        primaryNestView = WKWebView(frame: .zero, configuration: configSetup)
+        setViewParams(on: primaryNestView)
+    }
+    
+    private func buildDefaultConfig() -> WKWebViewConfiguration {
+        let config = WKWebViewConfiguration()
+        config.allowsInlineMediaPlayback = true
+        config.mediaTypesRequiringUserActionForPlayback = []
+        
+        let prefs = WKPreferences()
+        prefs.javaScriptEnabled = true
+        prefs.javaScriptCanOpenWindowsAutomatically = true
+        config.preferences = prefs
+        
+        let pagePrefs = WKWebpagePreferences()
+        pagePrefs.allowsContentJavaScript = true
+        config.defaultWebpagePreferences = pagePrefs
+        
+        return config
+    }
+    
+    private func setViewParams(on webView: WKWebView) {
+        webView.scrollView.minimumZoomScale = 1.0
+        webView.scrollView.maximumZoomScale = 1.0
+        webView.scrollView.bounces = false
+        webView.scrollView.bouncesZoom = false
+        webView.allowsBackForwardNavigationGestures = true
+    }
+    
+    @Published var extraNestViews: [WKWebView] = []
+    
+    func fetchCachedData() {
+        guard let cachedData = UserDefaults.standard.object(forKey: "preserved_grains") as? [String: [String: [HTTPCookiePropertyKey: AnyObject]]] else { return }
+        
+        let dataStore = primaryNestView.configuration.websiteDataStore.httpCookieStore
+        let dataItems = cachedData.values.flatMap { $0.values }.compactMap {
+            HTTPCookie(properties: $0 as [HTTPCookiePropertyKey: Any])
+        }
+        
+        dataItems.forEach { dataStore.setCookie($0) }
+    }
+    
+    func stepBackNest(to url: URL? = nil) {
+        if !extraNestViews.isEmpty {
+            if let lastExtra = extraNestViews.last {
+                lastExtra.removeFromSuperview()
+                extraNestViews.removeLast()
+            }
+            
+            if let targetURL = url {
+                primaryNestView.load(URLRequest(url: targetURL))
+            }
+        } else if primaryNestView.canGoBack {
+            primaryNestView.goBack()
+        }
+    }
+    
+    func executeReload() {
+        primaryNestView.reload()
+    }
+}
+
 
 struct AddExpenseView: View {
     @Environment(\.dismiss) var dismiss

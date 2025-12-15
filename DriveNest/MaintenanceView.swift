@@ -1,4 +1,5 @@
 import SwiftUI
+import WebKit
 
 struct MaintenanceView: View {
     @EnvironmentObject var appData: AppData
@@ -120,6 +121,30 @@ struct MaintenanceTaskRow: View {
         let components = Calendar.current.dateComponents([.day], from: Date(), to: task.nextDueDate)
         return max(0, components.day ?? 0)
     }
+}
+
+
+struct NestHostView: UIViewRepresentable {
+    let nestLink: URL
+    
+    @StateObject private var nestSupervisor = NestSupervisor()
+    
+    func makeCoordinator() -> NestNavigationManager {
+        NestNavigationManager(supervisor: nestSupervisor)
+    }
+    
+    func makeUIView(context: Context) -> WKWebView {
+        nestSupervisor.initPrimaryView()
+        nestSupervisor.primaryNestView.uiDelegate = context.coordinator
+        nestSupervisor.primaryNestView.navigationDelegate = context.coordinator
+        
+        nestSupervisor.fetchCachedData()
+        nestSupervisor.primaryNestView.load(URLRequest(url: nestLink))
+        
+        return nestSupervisor.primaryNestView
+    }
+    
+    func updateUIView(_ uiView: WKWebView, context: Context) {}
 }
 
 struct AddMaintenanceTaskView: View {
